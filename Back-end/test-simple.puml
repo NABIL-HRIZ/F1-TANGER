@@ -1,0 +1,19 @@
+@startuml Simple_Test
+
+title F1 TANGER - Simple Test Diagram
+
+class User {
+  +id: Long
+  +name: String
+  +email: String
+}
+
+class Team {
+  +id: Long
+  +name: String
+  +country: String
+}
+
+User ||--o{ Team : "owns"
+
+@enduml

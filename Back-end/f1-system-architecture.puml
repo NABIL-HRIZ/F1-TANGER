@@ -1,0 +1,95 @@
+@startuml F1_System_Architecture
+
+title F1 TANGER - System Architecture Overview
+
+!theme aws-orange
+
+package "Frontend Layer" {
+  [React/Vue.js Web App] as WEB
+  [Mobile Application] as MOBILE
+  [Admin Dashboard] as ADMIN
+}
+
+package "API Gateway" {
+  [Laravel Routes] as ROUTES
+  [Sanctum Middleware] as AUTH
+  [CORS Configuration] as CORS
+}
+
+package "Business Logic Layer" {
+  [Authentication Controller] as AUTH_CTRL
+  [Team Controller] as TEAM_CTRL
+  [Driver Controller] as DRIVER_CTRL
+  [Race Controller] as RACE_CTRL
+  [Ticket Controller] as TICKET_CTRL
+}
+
+package "Data Access Layer" {
+  [Eloquent ORM] as ORM
+  [Model Relationships] as RELATIONS
+  [Database Migrations] as MIGRATIONS
+}
+
+package "Database Layer" {
+  database "MySQL Database" {
+    [users] as U_TABLE
+    [teams] as T_TABLE
+    [drivers] as D_TABLE
+    [races] as R_TABLE
+    [laps] as L_TABLE
+    [standings] as S_TABLE
+    [tickets] as TK_TABLE
+    [personal_access_tokens] as TOKEN_TABLE
+  }
+}
+
+package "External Services" {
+  [File Storage] as STORAGE
+  [Image Processing] as IMAGE
+  [Email Service] as EMAIL
+}
+
+' Frontend to API connections
+WEB --> ROUTES : "HTTP/JSON API"
+MOBILE --> ROUTES : "HTTP/JSON API"
+ADMIN --> ROUTES : "HTTP/JSON API"
+
+' API Gateway flow
+ROUTES --> CORS : "handles"
+ROUTES --> AUTH : "authenticates"
+AUTH --> AUTH_CTRL : "routes to"
+AUTH --> TEAM_CTRL : "routes to"
+AUTH --> DRIVER_CTRL : "routes to"
+AUTH --> RACE_CTRL : "routes to"
+AUTH --> TICKET_CTRL : "routes to"
+
+' Business Logic to Data Access
+AUTH_CTRL --> ORM : "uses"
+TEAM_CTRL --> ORM : "uses"
+DRIVER_CTRL --> ORM : "uses"
+RACE_CTRL --> ORM : "uses"
+TICKET_CTRL --> ORM : "uses"
+
+' Data Access Layer
+ORM --> RELATIONS : "leverages"
+ORM --> MIGRATIONS : "based on"
+RELATIONS --> U_TABLE : "queries"
+RELATIONS --> T_TABLE : "queries"
+RELATIONS --> D_TABLE : "queries"
+RELATIONS --> R_TABLE : "queries"
+RELATIONS --> L_TABLE : "queries"
+RELATIONS --> S_TABLE : "queries"
+RELATIONS --> TK_TABLE : "queries"
+RELATIONS --> TOKEN_TABLE : "queries"
+
+' External Services
+TEAM_CTRL --> STORAGE : "stores logos"
+DRIVER_CTRL --> STORAGE : "stores images"
+STORAGE --> IMAGE : "processes"
+AUTH_CTRL --> EMAIL : "notifications"
+
+note right of AUTH : "Sanctum Token\nAuthentication"
+note right of ORM : "Laravel Eloquent\nModels & Relations"
+note left of "MySQL Database" : "Normalized Schema\nwith Foreign Keys"
+
+@enduml

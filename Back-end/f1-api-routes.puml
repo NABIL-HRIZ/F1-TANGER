@@ -1,0 +1,109 @@
+@startuml F1_API_Routes
+
+title F1 TANGER - API Routes Architecture
+
+!define ROUTE(method, path, desc) rectangle method as "method path\ndesc"
+
+package "Public Routes" #LightGreen {
+  ROUTE(POST, "/api/register", "User Registration\nCreate new user account")
+  ROUTE(POST, "/api/login", "User Authentication\nLogin and get token")
+  
+  package "Teams - Public Access" {
+    ROUTE(GET, "/api/teams", "List All Teams\nPublic team information")
+    ROUTE(GET, "/api/teams/search", "Search Teams\nFilter teams by criteria")
+  }
+  
+  package "Drivers - Public Access" {
+    ROUTE(GET, "/api/drivers", "List All Drivers\nPublic driver information")
+    ROUTE(GET, "/api/drivers/search", "Search Drivers\nFilter drivers by criteria")
+  }
+}
+
+package "Authenticated Routes" #LightBlue {
+  note top : Requires Sanctum Token\nAuthorization: Bearer {token}
+  
+  ROUTE(GET, "/api/user", "Get User Profile\nCurrent user information")
+  ROUTE(POST, "/api/logout", "User Logout\nRevoke current token")
+  
+  package "Team Management" #LightYellow {
+    ROUTE(POST, "/api/teams/create", "Create New Team\nAdd team to system")
+    ROUTE(POST, "/api/teams/update/{id}", "Update Team\nModify team details")
+    ROUTE(DELETE, "/api/teams/delete/{id}", "Delete Team\nRemove team from system")
+  }
+  
+  package "Driver Management" #LightYellow {
+    ROUTE(POST, "/api/drivers/create", "Create New Driver\nAdd driver to system")
+    ROUTE(POST, "/api/drivers/update/{id}", "Update Driver\nModify driver details")
+    ROUTE(DELETE, "/api/drivers/delete/{id}", "Delete Driver\nRemove driver from system")
+  }
+}
+
+package "Controllers" #LightCyan {
+  class AuthenticatedSessionController {
+    +store(Request): JsonResponse
+    +destroy(Request): JsonResponse
+  }
+  
+  class RegisteredUserController {
+    +store(Request): JsonResponse
+  }
+  
+  class TeamController {
+    +index(): JsonResponse
+    +search(Request): JsonResponse
+    +store(Request): JsonResponse
+    +update(Request, id): JsonResponse
+    +destroy(id): JsonResponse
+  }
+  
+  class DriverController {
+    +index(): JsonResponse
+    +search(Request): JsonResponse
+    +store(Request): JsonResponse
+    +update(Request, id): JsonResponse
+    +destroy(id): JsonResponse
+  }
+}
+
+package "Middleware & Security" #LightGray {
+  rectangle "Sanctum Middleware" as SM {
+    - Token Validation
+    - User Authentication
+    - Rate Limiting
+  }
+  
+  rectangle "CORS Configuration" as CORS {
+    - Cross-Origin Requests
+    - API Access Control
+  }
+  
+  rectangle "Validation" as VAL {
+    - Input Validation
+    - Data Sanitization
+    - Business Rules
+  }
+}
+
+' Route to Controller Mappings
+"/api/login" --> AuthenticatedSessionController
+"/api/register" --> RegisteredUserController
+"/api/logout" --> AuthenticatedSessionController
+
+"/api/teams" --> TeamController
+"/api/teams/search" --> TeamController
+"/api/teams/create" --> TeamController
+"/api/teams/update/{id}" --> TeamController
+"/api/teams/delete/{id}" --> TeamController
+
+"/api/drivers" --> DriverController
+"/api/drivers/search" --> DriverController
+"/api/drivers/create" --> DriverController
+"/api/drivers/update/{id}" --> DriverController
+"/api/drivers/delete/{id}" --> DriverController
+
+' Middleware Dependencies
+"Authenticated Routes" --> SM : "protected by"
+SM --> VAL : "validates through"
+"Public Routes" --> CORS : "configured with"
+
+@enduml

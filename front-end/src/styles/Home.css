@@ -1,0 +1,667 @@
+/* ============================================================
+   MODERN F1 WEBSITE - DARK THEME WITH OFFICIAL F1 COLORS
+   ============================================================ */
+
+:root {
+  --f1-red: #E10600;
+  --f1-black: #000000;
+  --f1-dark-gray: #1a1a1a;
+  --f1-light-gray: #f5f5f5;
+  --f1-white: #ffffff;
+  --f1-accent: #ff1801;
+  --transition: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--f1-black);
+  color: var(--f1-white);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+html, body, #root {
+  width: 100%;
+  height: 100%;
+}
+
+.home-page {
+  background: var(--f1-black);
+}
+
+/* ============================================================
+   HERO SECTION WITH VIDEO BACKGROUND
+   ============================================================ */
+
+.hero-section {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.hero-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 0.6) 0%,
+    rgba(0, 0, 0, 0.4) 50%,
+    rgba(225, 6, 0, 0.3) 100%
+  );
+  z-index: 2;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 3;
+  text-align: center;
+  max-width: 800px;
+  padding: 0 20px;
+}
+
+.hero-title {
+  font-size: clamp(3rem, 8vw, 5rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  margin-bottom: 20px;
+  color: var(--f1-white);
+  text-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  animation: fadeInDown 1s ease-out;
+}
+
+.hero-subtitle {
+  font-size: clamp(1rem, 3vw, 1.5rem);
+  color: var(--f1-red);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 40px;
+  font-weight: 600;
+  animation: fadeInUp 1s ease-out 0.2s backwards;
+}
+
+.hero-cta {
+  padding: 16px 60px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  background: var(--f1-red);
+  color: var(--f1-white);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s var(--transition);
+  box-shadow: 0 10px 40px rgba(225, 6, 0, 0.3);
+  animation: fadeInUp 1s ease-out 0.4s backwards;
+}
+
+.hero-cta:hover {
+  background: var(--f1-accent);
+  transform: translateY(-4px);
+  box-shadow: 0 15px 50px rgba(225, 6, 0, 0.5);
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================================
+   RESULTS SECTION
+   ============================================================ */
+
+.results-section {
+  padding: 80px 20px;
+  background: var(--f1-black);
+  border-top: 1px solid var(--f1-dark-gray);
+}
+
+.section-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-title {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  margin-bottom: 60px;
+  color: var(--f1-white);
+  position: relative;
+  display: inline-block;
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: -15px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: var(--f1-red);
+}
+
+.results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  margin-top: 40px;
+}
+
+.result-card {
+  background: linear-gradient(135deg, var(--f1-dark-gray) 0%, #222 100%);
+  border: 1px solid #333;
+  border-radius: 4px;
+  padding: 40px 30px;
+  text-align: center;
+  transition: all 0.3s var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.result-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--f1-red);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s var(--transition);
+}
+
+.result-card:hover {
+  transform: translateY(-10px);
+  border-color: var(--f1-red);
+  background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+}
+
+.result-card:hover::before {
+  transform: scaleX(1);
+}
+
+.position-badge {
+  font-size: 3rem;
+  font-weight: 900;
+  color: var(--f1-red);
+  margin-bottom: 20px;
+}
+
+.driver-name {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: var(--f1-white);
+  text-transform: uppercase;
+}
+
+.team-name {
+  font-size: 0.95rem;
+  color: #aaa;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.race-time {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--f1-red);
+}
+
+/* ============================================================
+   TEAMS SECTION
+   ============================================================ */
+
+.teams-section {
+  padding: 80px 20px;
+  background: linear-gradient(135deg, #0a0a0a 0%, var(--f1-black) 100%);
+  border-top: 1px solid var(--f1-dark-gray);
+}
+
+.teams-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-top: 40px;
+}
+
+.team-card {
+  background: linear-gradient(135deg, var(--f1-dark-gray) 0%, #222 100%);
+  border: 1px solid #333;
+  border-radius: 4px;
+  padding: 40px 30px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.team-card:hover {
+  transform: translateY(-8px);
+  border-color: var(--f1-red);
+}
+
+.team-color-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: var(--team-color);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s var(--transition);
+}
+
+.team-card:hover .team-color-bar {
+  transform: scaleX(1);
+}
+
+.team-card .team-name {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--f1-white);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* ============================================================
+   DRIVERS SECTION
+   ============================================================ */
+
+.drivers-section {
+  padding: 80px 20px;
+  background: var(--f1-black);
+  border-top: 1px solid var(--f1-dark-gray);
+}
+
+.drivers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 30px;
+  margin-top: 40px;
+}
+
+.driver-card {
+  text-align: center;
+  transition: all 0.3s var(--transition);
+  padding: 30px;
+  border-radius: 4px;
+  background: linear-gradient(135deg, var(--f1-dark-gray) 0%, #222 100%);
+  border: 1px solid #333;
+  position: relative;
+  overflow: hidden;
+}
+
+.driver-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(225, 6, 0, 0.1) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s var(--transition);
+}
+
+.driver-card:hover {
+  transform: translateY(-12px);
+  border-color: var(--f1-red);
+}
+
+.driver-card:hover::before {
+  opacity: 1;
+}
+
+.driver-avatar {
+  width: 120px;
+  height: 120px;
+  background: linear-gradient(135deg, var(--f1-dark-gray), #333);
+  border-radius: 50%;
+  margin: 0 auto 20px;
+  border: 2px solid var(--f1-red);
+  transition: all 0.3s var(--transition);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.driver-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.avatar-placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #333, #555);
+}
+
+.driver-card:hover .driver-avatar {
+  box-shadow: 0 0 30px rgba(225, 6, 0, 0.4);
+}
+
+.driver-card .driver-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  color: var(--f1-white);
+}
+
+.driver-team {
+  font-size: 0.9rem;
+  color: #aaa;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.driver-points {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--f1-red);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ============================================================
+   NEWS SECTION
+   ============================================================ */
+
+.news-section {
+  padding: 80px 20px;
+  background: linear-gradient(135deg, #0a0a0a 0%, var(--f1-black) 100%);
+  border-top: 1px solid var(--f1-dark-gray);
+}
+
+.news-scroll {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+  margin-top: 40px;
+}
+
+.news-card {
+  background: linear-gradient(135deg, var(--f1-dark-gray) 0%, #222 100%);
+  border: 1px solid #333;
+  border-radius: 4px;
+  overflow: hidden;
+  transition: all 0.3s var(--transition);
+  cursor: pointer;
+}
+
+.news-card:hover {
+  transform: translateY(-8px);
+  border-color: var(--f1-red);
+  box-shadow: 0 20px 50px rgba(225, 6, 0, 0.2);
+}
+
+.news-image {
+  width: 100%;
+  height: 180px;
+  background: linear-gradient(135deg, #222, #1a1a1a);
+  border-bottom: 3px solid var(--f1-red);
+}
+
+.news-card > * {
+  padding: 0 20px;
+}
+
+.news-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--f1-white);
+  margin: 20px 0 10px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.news-date {
+  font-size: 0.85rem;
+  color: var(--f1-red);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+}
+
+.news-description {
+  font-size: 0.95rem;
+  color: #aaa;
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+
+.f1-footer {
+  background: var(--f1-black);
+  border-top: 2px solid var(--f1-red);
+  padding: 60px 20px;
+  margin-top: 80px;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.footer-logo {
+  font-size: 2rem;
+  font-weight: 900;
+  letter-spacing: 3px;
+  color: var(--f1-red);
+  margin-bottom: 15px;
+  text-transform: uppercase;
+}
+
+.footer-copyright {
+  font-size: 0.9rem;
+  color: #666;
+  letter-spacing: 1px;
+}
+
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ============================================================
+   RESPONSIVE DESIGN
+   ============================================================ */
+
+@media (max-width: 768px) {
+  .results-section,
+  .teams-section,
+  .drivers-section,
+  .news-section {
+    padding: 60px 15px;
+  }
+
+  .section-title {
+    font-size: 1.8rem;
+    margin-bottom: 40px;
+  }
+
+  .section-title::after {
+    width: 100%;
+  }
+
+  .results-grid,
+  .teams-grid,
+  .drivers-grid,
+  .news-scroll {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .hero-title {
+    font-size: 2.5rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+
+  .hero-cta {
+    padding: 14px 40px;
+    font-size: 0.95rem;
+  }
+
+  .position-badge {
+    font-size: 2rem;
+  }
+
+  .driver-name {
+    font-size: 1.2rem;
+  }
+
+  .driver-avatar {
+    width: 100px;
+    height: 100px;
+  }
+
+  .f1-footer {
+    padding: 40px 15px;
+  }
+
+  .footer-logo {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .results-section,
+  .teams-section,
+  .drivers-section,
+  .news-section {
+    padding: 40px 10px;
+  }
+
+  .section-title {
+    font-size: 1.4rem;
+    margin-bottom: 30px;
+  }
+
+  .hero-title {
+    font-size: 1.8rem;
+    letter-spacing: 2px;
+  }
+
+  .hero-subtitle {
+    font-size: 0.85rem;
+  }
+
+  .hero-cta {
+    padding: 12px 30px;
+    font-size: 0.85rem;
+  }
+
+  .result-card,
+  .team-card,
+  .driver-card,
+  .news-card {
+    padding: 25px 15px;
+  }
+
+  .position-badge {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+  }
+
+  .driver-name {
+    font-size: 1rem;
+  }
+
+  .driver-avatar {
+    width: 80px;
+    height: 80px;
+  }
+
+  .news-image {
+    height: 120px;
+  }
+
+  .footer-logo {
+    font-size: 1.2rem;
+  }
+
+  .footer-copyright {
+    font-size: 0.8rem;
+  }
+}

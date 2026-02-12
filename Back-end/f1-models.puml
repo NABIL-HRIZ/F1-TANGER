@@ -1,0 +1,207 @@
+@startuml F1_Models_Classes
+
+title F1 TANGER - Laravel Models Class Diagram
+
+package "Authentication & Users" {
+  class User {
+    +id: Long
+    +name: String
+    +email: String
+    +password: String
+    +email_verified_at: DateTime
+    +remember_token: String
+    +created_at: DateTime
+    +updated_at: DateTime
+    --
+    +clients(): HasMany
+    +teams(): HasMany
+    +createToken(name): Token
+    +tokens(): HasMany
+    +hasRole(role): Boolean
+  }
+
+  class Client {
+    +id: Long
+    +user_id: Long
+    +phone: String
+    +address: Text
+    +date_of_birth: Date
+    +created_at: DateTime
+    +updated_at: DateTime
+    --
+    +user(): BelongsTo
+  }
+}
+
+package "Racing Entities" {
+  class Team {
+    +id: Long
+    +name: String
+    +country: String
+    +base_location: String
+    +team_principal: String
+    +chassis: String
+    +engine_supplier: String
+    +founded_date: Date
+    +logo: String
+    +total_points: Integer
+    +user_id: Long
+    +created_at: DateTime
+    +updated_at: DateTime
+    --
+    +user(): BelongsTo
+    +drivers(): HasMany
+    +cars(): HasMany
+    +standings(): HasMany
+    +laps(): HasMany
+  }
+
+  class Driver {
+    +id: Long
+    +first_name: String
+    +last_name: String
+    +nationality: String
+    +date_of_birth: Date
+    +team_id: Long
+    +total_points: Integer
+    +driver_img: String
+    +created_at: DateTime
+    +updated_at: DateTime
+    --
+    +team(): BelongsTo
+    +cars(): HasMany
+    +standings(): HasMany
+    +laps(): HasMany
+    +getFullNameAttribute(): String
+  }
+
+  class Cars {
+    +id: Long
+    +model: String
+    +year: Integer
+    +engine: String
+    +team_id: Long
+    +driver_id: Long
+    +created_at: DateTime
+    +updated_at: DateTime
+    --
+    +team(): BelongsTo
+    +driver(): BelongsTo
+  }
+}
+
+package "Race Management" {
+  class Race {
+    +id: Long
+    +name: String
+    +location: String
+    +date: Date
+    +status: String
+    +created_at: DateTime
+    +updated_at: DateTime
+    --
+    +laps(): HasMany
+    +tickets(): HasMany
+  }
+
+  class Lap {
+    +id: Long
+    +race_id: Long
+    +driver_id: Long
+    +team_id: Long
+    +lap_number: Integer
+    +lap_time: Time
+    +position: Integer
+    +created_at: DateTime
+    +updated_at: DateTime
+    --
+    +race(): BelongsTo
+    +driver(): BelongsTo
+    +team(): BelongsTo
+  }
+
+  class Standing {
+    +id: Long
+    +driver_id: Long
+    +team_id: Long
+    +points: Integer
+    +position: Integer
+    +season_year: Integer
+    +created_at: DateTime
+    +updated_at: DateTime
+    --
+    +driver(): BelongsTo
+    +team(): BelongsTo
+  }
+}
+
+package "Event Management" {
+  class Ticket {
+    +id: Long
+    +race_id: Long
+    +ticket_type: String
+    +price: Decimal
+    +quantity_available: Integer
+    +created_at: DateTime
+    +updated_at: DateTime
+    --
+    +race(): BelongsTo
+  }
+}
+
+package "Authorization (Laratrust)" {
+  class Role {
+    +id: Long
+    +name: String
+    +display_name: String
+    +description: Text
+    +created_at: DateTime
+    +updated_at: DateTime
+  }
+
+  class Permission {
+    +id: Long
+    +name: String
+    +display_name: String
+    +description: Text
+    +created_at: DateTime
+    +updated_at: DateTime
+  }
+}
+
+' Relationships - User Management
+User ||--o{ Client : "has profile"
+User ||--o{ Team : "owns"
+
+' Relationships - Racing
+Team ||--o{ Driver : "employs"
+Team ||--o{ Cars : "owns"
+Team ||--o{ Standing : "competes in"
+Team ||--o{ Lap : "records"
+
+Driver }o--|| Team : "belongs to"
+Driver ||--o{ Cars : "drives"
+Driver ||--o{ Standing : "ranked in"
+Driver ||--o{ Lap : "completes"
+
+Cars }o--|| Team : "owned by"
+Cars }o--|| Driver : "driven by"
+
+' Relationships - Race Events
+Race ||--o{ Lap : "contains"
+Race ||--o{ Ticket : "sells"
+
+Lap }o--|| Race : "part of"
+Lap }o--|| Driver : "completed by"
+Lap }o--|| Team : "for team"
+
+Standing }o--|| Driver : "ranks"
+Standing }o--|| Team : "ranks"
+
+Ticket }o--|| Race : "for event"
+
+' Authorization relationships
+User }|--|| Role : "has roles"
+Role }|--|| Permission : "has permissions"
+
+@enduml

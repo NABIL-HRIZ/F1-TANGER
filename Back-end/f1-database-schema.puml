@@ -1,0 +1,170 @@
+@startuml F1_Database_Schema
+
+!define TABLE(name,desc) class name as "desc" << (T,#FFAAAA) >>
+!define PK(x) <u>x</u>
+!define FK(x) <i>x</i>
+
+title F1 TANGER - Database Schema
+
+TABLE(users, "users\n(System Users)") {
+  PK(id): bigint
+  --
+  name: varchar(255)
+  email: varchar(255) {unique}
+  email_verified_at: timestamp
+  password: varchar(255)
+  remember_token: varchar(100)
+  created_at: timestamp
+  updated_at: timestamp
+}
+
+TABLE(teams, "teams\n(F1 Racing Teams)") {
+  PK(id): bigint
+  --
+  name: varchar(255)
+  country: varchar(255)
+  base_location: varchar(255)
+  team_principal: varchar(255)
+  chassis: varchar(255)
+  engine_supplier: varchar(255)
+  founded_date: date
+  logo: varchar(255)
+  total_points: integer
+  FK(user_id): bigint
+  created_at: timestamp
+  updated_at: timestamp
+}
+
+TABLE(drivers, "drivers\n(F1 Racing Drivers)") {
+  PK(id): bigint
+  --
+  first_name: varchar(255)
+  last_name: varchar(255)
+  nationality: varchar(255)
+  date_of_birth: date
+  FK(team_id): bigint
+  total_points: integer DEFAULT 0
+  driver_img: varchar(255) NULL
+  created_at: timestamp
+  updated_at: timestamp
+}
+
+TABLE(cars, "cars\n(Racing Cars)") {
+  PK(id): bigint
+  --
+  model: varchar(255)
+  year: integer
+  engine: varchar(255)
+  FK(team_id): bigint
+  FK(driver_id): bigint
+  created_at: timestamp
+  updated_at: timestamp
+}
+
+TABLE(races, "races\n(Race Events)") {
+  PK(id): bigint
+  --
+  name: varchar(255)
+  location: varchar(255)
+  date: date
+  status: varchar(255)
+  created_at: timestamp
+  updated_at: timestamp
+}
+
+TABLE(laps, "laps\n(Race Lap Times)") {
+  PK(id): bigint
+  --
+  FK(race_id): bigint
+  FK(driver_id): bigint
+  FK(team_id): bigint
+  lap_number: integer
+  lap_time: time
+  position: integer
+  created_at: timestamp
+  updated_at: timestamp
+}
+
+TABLE(standings, "standings\n(Championship Standings)") {
+  PK(id): bigint
+  --
+  FK(driver_id): bigint
+  FK(team_id): bigint
+  points: integer
+  position: integer
+  season_year: integer
+  created_at: timestamp
+  updated_at: timestamp
+}
+
+TABLE(tickets, "tickets\n(Event Tickets)") {
+  PK(id): bigint
+  --
+  FK(race_id): bigint
+  ticket_type: varchar(255)
+  price: decimal(8,2)
+  quantity_available: integer
+  created_at: timestamp
+  updated_at: timestamp
+}
+
+TABLE(clients, "clients\n(Customer Data)") {
+  PK(id): bigint
+  --
+  FK(user_id): bigint
+  phone: varchar(255)
+  address: text
+  date_of_birth: date
+  created_at: timestamp
+  updated_at: timestamp
+}
+
+TABLE(personal_access_tokens, "personal_access_tokens\n(API Tokens - Sanctum)") {
+  PK(id): bigint
+  --
+  tokenable_type: varchar(255)
+  FK(tokenable_id): bigint
+  name: varchar(255)
+  token: varchar(64) {unique}
+  abilities: text NULL
+  last_used_at: timestamp NULL
+  expires_at: timestamp NULL
+  created_at: timestamp
+  updated_at: timestamp
+}
+
+' Relationships
+users ||--o{ teams : "owns"
+users ||--o{ clients : "has profile"
+users ||--o{ personal_access_tokens : "generates"
+
+teams ||--o{ drivers : "employs"
+teams ||--o{ cars : "owns"
+teams ||--o{ laps : "records"
+teams ||--o{ standings : "participates"
+
+drivers }o--|| teams : "belongs to"
+drivers ||--o{ cars : "drives"
+drivers ||--o{ laps : "completes"
+drivers ||--o{ standings : "ranked in"
+
+races ||--o{ laps : "contains"
+races ||--o{ tickets : "sells"
+
+cars }o--|| teams : "owned by"
+cars }o--|| drivers : "driven by"
+
+laps }o--|| races : "part of"
+laps }o--|| drivers : "completed by"
+laps }o--|| teams : "for team"
+
+standings }o--|| drivers : "ranks"
+standings }o--|| teams : "ranks"
+
+tickets }o--|| races : "for event"
+
+clients }o--|| users : "profile of"
+
+personal_access_tokens }o--|| users : "belongs to"
+
+@enduml
